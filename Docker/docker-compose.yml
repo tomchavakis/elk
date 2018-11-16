@@ -17,7 +17,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - /c/Projects/elastic-search-docker/Docker/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - docker_elk
 
@@ -25,7 +25,7 @@ services:
     image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3"
     container_name: logstash
     volumes:
-      - /c/Projects/elastic-search-docker/Docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
       - "5000:5000"
     environment:
@@ -43,7 +43,7 @@ services:
     ports:
       - "5601:5601"
     volumes:
-      - "/c/Projects/elastic-search-docker/config/kibana.yml:/usr/share/kibana/config/kibana.yml"
+      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
     depends_on:
       - elasticsearch
     networks:

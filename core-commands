@@ -1,0 +1,102 @@
+#info
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-add-package
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-add-reference
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new?tabs=netcore2x
+
+#create a new solution
+dotnet new sln -n nss-tm-netcore
+
+#add projects to the created solution file
+dotnet sln nss-tm-netcore.sln add nss-tm-module-mqtt/nss-tm-module-mqtt.csproj
+dotnet sln nss-tm-netcore.sln add nss-tm-console/nss-tm-console.csproj
+
+#add nuget package
+dotnet add package M2Mqtt --version 4.3.0
+dotnet add package NUnit --version 3.9.0
+dotnet add package NUnit3TestAdapter --version 3.9.0
+
+
+#nuget
+dotnet nuget locals -l all
+
+
+#Docker
+
+-- Mysql
+
+Official
+docker run --name transfly-mysql -e MYSQL_ROOT_PASSWORD=secret -d mysql:latest
+
+--Adapter
+Pomelo
+https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql
+
+
+-- Elastic Search
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+https://www.docker.elastic.co
+https://www.elastic.co/guide/en/kibana/current/_configuring_kibana_on_docker.html#docker-env-config
+
+#Docker
+http://elk-docker.readthedocs.io/#es-not-starting-max-map-count
+sudo sysctl -w vm.max_map_count=262144
+
+#elastic-search
+docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.2.2
+#kibana
+docker pull docker.elastic.co/kibana/kibana:6.2.2
+
+docker run -p 5601:5601  docker.elastic.co/kibana/kibana:6.2.2
+
+
+Kibana Tools
+
+https://www.elastic.co/guide/en/kibana/6.x/tutorial-load-dataset.html
+curl -H 'Content-Type: application/x-ndjson' -XPOST 'localhost:9200/_bulk?pretty' --data-binary @logs.jsonl
+
+GET logstash-2015.05.20_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /_cat/indices?v
+
+
+GET /logstash-2015.05.20/_count?q=clientip:"243.124.3.200"
+
+GET /logstash-2015.05.20/_search?q=*
+{
+   "query": { "match": {  "clientip": "243.124.3.200" } }
+}
+
+GET /logstash-2015.05.20/_search?q=*
+{
+   "query": { "match": {  "clientip": "243.124.3.200" } }
+}
+ 
+GET _cat/shards
+
+GET /_cat/health?v
+
+GET /_cat/master?v
+
+GET /_cat/master?help
+
+GET _cat/templates?v&s=order:desc,index_patterns
+
+GET /_cat/nodes?v
+
+GET /_cat/indices?v
+
+
+#heartbeat -- elastic
+
+curl -L -O https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-6.2.2-amd64.deb
+sudo dpkg -i heartbeat-6.2.2-amd64.deb
+
+/etc/heartbeat
+
+sudo service heartbeat-elastic start
